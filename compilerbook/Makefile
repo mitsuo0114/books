@@ -1,4 +1,4 @@
-main: main.c
+main: main.c main.h
 
 test: main
 	./unittest.sh
