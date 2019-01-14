@@ -99,7 +99,7 @@ void tokenize(char *p) {
             i++;
             continue;
         }
-        fprintf(stderr, "Unexpected Charactor error : %s", p);
+        fprintf(stderr, "Unexpected Character error : %s", p);
         exit(1);
     }
 
@@ -158,7 +158,36 @@ void error(int i) {
     exit(1);
 }
 
+
+int expect(char* file, int line, int expected, int actual){
+    if(expected == actual){
+        return 0;
+    }
+    fprintf(stderr, "%s : LINE  %d, %d is expected, but got %d\n", file, line, expected, actual);
+    exit(1);
+}
+
+void runtest(){
+    Vector *vec = new_vector();
+    expect(__FILE__, __LINE__, 0, vec->len);
+
+    for (int i = 0; i < 100; i++){
+        vec_push(vec, (void *)i);
+    }
+    expect(__FILE__, __LINE__, 100, vec->len);
+    expect(__FILE__, __LINE__, 0, (int)vec->data[0]);
+    expect(__FILE__, __LINE__, 50, (int)vec->data[50]);
+    expect(__FILE__, __LINE__, 99, (int)vec->data[99]);
+
+    printf("runtest() OK\n");
+}
+
 int main(int argc, char **argv) {
+    if (strcmp(argv[1],"-test") == 0){
+        runtest();
+        return 0;
+    }
+
     if (argc != 2) {
         fprintf(stderr, "Invalid args");
         return 1;
