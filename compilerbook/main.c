@@ -9,19 +9,7 @@
 #include "main.h"
 
 int pos = 0;
-enum {
-    TK_NUM = 256,
-    TK_EOF
-};
-
-typedef struct {
-    int ty;
-    long int val;
-    char *input;
-} Token;
-
 Token tokens[100];
-
 
 Node *new_node(int ty, Node *lhs, Node *rhs) {
     Node *node = malloc(sizeof(Node));
@@ -37,7 +25,6 @@ Node *new_node_num(int val) {
     node->val = val;
     return node;
 }
-
 
 int consume(int ty) {
     if (tokens[pos].ty != ty) {
@@ -87,7 +74,6 @@ Node *term() {
         return new_node_num(tokens[pos++].val);
     }
     fprintf(stderr, "Unexpected Token: %s", tokens[pos].input);
-
 }
 
 void tokenize(char *p) {

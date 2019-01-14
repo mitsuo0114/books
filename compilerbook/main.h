@@ -9,6 +9,17 @@ typedef struct Node {
     int val;
 } Node;
 
+enum {
+    TK_NUM = 256,
+    TK_EOF
+};
+
+typedef struct {
+    int ty;
+    long int val;
+    char *input;
+} Token;
+
 
 Node *new_node(int ty, Node *lhs, Node *rhs);
 
