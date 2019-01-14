@@ -1,2 +1,8 @@
 cmake-build-*/
 .idea/
+
+compilerbook/main
+compilerbook/tmp
+compilerbook/tmp.s
+
+
