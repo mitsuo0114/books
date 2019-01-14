@@ -10,6 +10,24 @@
 
 int pos = 0;
 Token tokens[100];
+Vector *vtokens;
+
+Vector *new_vector() {
+    Vector *vec = malloc(sizeof(Vector));
+    vec->data = malloc(sizeof(void *) * 16);
+    vec->capacity = 16;
+    vec->len = 0;
+    return vec;
+}
+
+void vec_push(Vector *vec, void *elem) {
+    if (vec->capacity == vec->len) {
+        vec->capacity += 2;
+        vec->data = realloc(vec->data, sizeof(void *) * vec->capacity);
+    }
+    vec->data[vec->len++] = elem;
+}
+
 
 Node *new_node(int ty, Node *lhs, Node *rhs) {
     Node *node = malloc(sizeof(Node));
@@ -85,6 +103,11 @@ void tokenize(char *p) {
         }
 
         if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' || *p == ')') {
+            Token t;
+            t.ty = *p;
+            t.input = p;
+            vec_push(vtokens, (void *)&t);
+
             tokens[i].ty = *p;
             tokens[i].input = p;
             i++;
@@ -102,6 +125,11 @@ void tokenize(char *p) {
         fprintf(stderr, "Unexpected Character error : %s", p);
         exit(1);
     }
+
+    Token t;
+    t.ty = TK_EOF;
+    t.input = p;
+    vec_push(vtokens, &t);
 
     tokens[i].ty = TK_EOF;
     tokens[i].input = p;
@@ -137,21 +165,6 @@ void gen(Node *node) {
     printf("  push rax\n");
 }
 
-Vector *new_vector() {
-    Vector *vec = malloc(sizeof(Vector));
-    vec->data = malloc(sizeof(void *) * 16);
-    vec->capacity = 16;
-    vec->len = 0;
-    return vec;
-}
-
-void vec_push(Vector *vec, void *elem) {
-    if (vec->capacity == vec->len) {
-        vec->capacity += 2;
-        vec->data = realloc(vec->data, sizeof(void *) * vec->capacity);
-    }
-    vec->data[vec->len++] = elem;
-}
 
 void error(int i) {
     fprintf(stderr, "Unexpected token : %s\n", tokens[i].input);
@@ -192,6 +205,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Invalid args");
         return 1;
     }
+    vtokens = new_vector();
     tokenize(argv[1]);
     Node *node = add();
 
