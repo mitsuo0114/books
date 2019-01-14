@@ -20,6 +20,11 @@ typedef struct {
     char *input;
 } Token;
 
+typedef struct {
+    void **data;
+    int capacity;
+    int len;
+} Vector;
 
 Node *new_node(int ty, Node *lhs, Node *rhs);
 
