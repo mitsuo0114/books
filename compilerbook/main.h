@@ -1,5 +1,6 @@
 enum {
     ND_NUM = 256,
+    ND_IDENT,
 };
 
 typedef struct Node {
@@ -7,10 +8,12 @@ typedef struct Node {
     struct Node *lhs;
     struct Node *rhs;
     int val;
+    char name;
 } Node;
 
 enum {
     TK_NUM = 256,
+    TK_IDENT,
     TK_EOF
 };
 
@@ -35,6 +38,12 @@ Node *mul();
 Node *add();
 
 Node *term();
+
+Node *program();
+
+Node *stmt();
+
+Node *assign();
 
 int consume(int ty);
 
